@@ -6,6 +6,6 @@ import GameAbi from '~/abi/game_abi.json'
 export function useGameContract() {
   return useContract({
     abi: GameAbi.abi as Abi[],
-    address: '0x023899c9835d78f9c0f5497586ed1fe1197f397a7111bdb32b01cb1ee64ad92b',
+    address: '0x070d16b9cd7385155cd521f9f6b5c9056d366237012a224effbd6b2b409a5615',
   })
 }

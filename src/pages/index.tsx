@@ -7,10 +7,13 @@ import {
 } from '@starknet-react/core'
 import type { NextPage } from 'next'
 import { ConnectWallet } from '~/components/ConnectWallet'
-
+import { BigNumber } from 'bignumber.js'
 import { CallContractStringifyReturn, htmlParse } from '~/components/Contracts'
 import { useGameContract } from '~/hooks/game'
 import { useForm } from "react-hook-form";
+
+const PRIME_BN = new BigNumber ('3618502788666131213697322783095070105623107215331596699973092056135872020481')
+const FP_BN = new BigNumber (10**12)
 
 const Home: NextPage = () => {
 
@@ -45,12 +48,21 @@ const Home: NextPage = () => {
         console.log('frontend not connected to game contract')
       }
       else {
+        BigNumber.config({ EXPONENTIAL_AT: 80 })
+        let data_movex_fp_bn = new BigNumber (data['moveXRequired']).multipliedBy(FP_BN)
+        let data_movey_fp_bn = new BigNumber (data['moveYRequired']).multipliedBy(FP_BN)
+
+        let move_x = data_movex_fp_bn.isPositive() ? data_movex_fp_bn : PRIME_BN.plus (data_movex_fp_bn)
+        let move_y = data_movey_fp_bn.isPositive() ? data_movey_fp_bn : PRIME_BN.plus (data_movey_fp_bn)
+        let move_x_str = move_x.toString()
+        let move_y_str = move_y.toString()
+
         invokeSubmitMoveForLevel ({ args: {
           level: data['levelRequired'],
-          move_x: data['moveXRequired'],
-          move_y: data['moveYRequired']
+          move_x: move_x_str,
+          move_y: move_y_str
         } })
-        console.log('submit move...', data)
+        console.log('submit move: ', data['levelRequired'], move_x_str, move_y_str)
       }
     }
 
@@ -71,8 +83,8 @@ const Home: NextPage = () => {
       </form> */}
 
       <h3>Make move</h3>
-      <p>level id: felt; 0 or 1</p>
-      <p>move.x & move.y: felt; 12 decimal points</p>
+      <p>level id: 0 or 1</p>
+      <p>move.x & move.y: float; check `game.cairo` for constraints</p>
       <form onSubmit={handleSubmit(onSubmitMove)}>
         <input defaultValue="level id" {...register("levelRequired", { required: true })} />
         {errors.levelRequired && <span> (This field is required) </span>}
@@ -88,7 +100,7 @@ const Home: NextPage = () => {
 
       <h3>System status</h3>
       <p> {'>'} Number of solutions found: { solutionCountValue?.count }</p>
-      <p> {'>'} Scoreboard: { htmlParse(html_string) }</p>
+      <div> {'>'} Scoreboard: { htmlParse(html_string) }</div>
 
       <DemoTransactionManager />
 
