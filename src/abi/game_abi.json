@@ -176,8 +176,12 @@
                 "type": "felt"
             },
             {
-                "name": "move",
-                "type": "Vec2"
+                "name": "move_x",
+                "type": "felt"
+            },
+            {
+                "name": "move_y",
+                "type": "felt"
             }
         ],
         "name": "submit_move_for_level",
