@@ -48,7 +48,7 @@ const Home: NextPage = () => {
         console.log('frontend not connected to game contract')
       }
       else {
-        BigNumber.config({ EXPONENTIAL_AT: 80 })
+        BigNumber.config({ EXPONENTIAL_AT: 76 })
         let data_movex_fp_bn = new BigNumber (data['moveXRequired']).multipliedBy(FP_BN)
         let data_movey_fp_bn = new BigNumber (data['moveYRequired']).multipliedBy(FP_BN)
 
