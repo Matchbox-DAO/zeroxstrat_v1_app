@@ -6,7 +6,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <StarknetProvider>
       <NextHead>
-        <title>StarkNet ❤️ React</title>
+        <title>0xstrat v1.0</title>
       </NextHead>
       <Component {...pageProps} />
     </StarknetProvider>
