@@ -73,6 +73,7 @@ const Home: NextPage = () => {
 
       <h3>0xstrat v1.0</h3>
       <p>:: a Class B solve2mint system ::</p>
+      <p>   powered by <a href="https://github.com/topology-gg/fountain" target="_blank" rel="noopener noreferrer">Fountain</a>, a mini physics engine in Cairo</p>
 
       {/* <h3>View level</h3>
       <form onSubmit={handleSubmit(onSubmitLevel)}>
