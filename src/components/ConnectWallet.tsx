@@ -1,11 +1,13 @@
-import { useStarknet } from '@starknet-react/core'
+import { useStarknet, InjectedConnector } from '@starknet-react/core'
 
 export function ConnectWallet() {
-  const { account, connectBrowserWallet } = useStarknet()
+  const { account, connect } = useStarknet()
+
+  const injected = new InjectedConnector()
 
   if (account) {
     return <p>Account: {account}</p>
   }
 
-  return <button onClick={connectBrowserWallet}>Connect</button>
+  return <button onClick={() => connect(injected)}>Connect</button>
 }
