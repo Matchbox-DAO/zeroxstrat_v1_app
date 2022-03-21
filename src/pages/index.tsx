@@ -27,8 +27,11 @@ const Home: NextPage = () => {
   const { data: solutionCountValue } = useStarknetCall({
     contract: gameContract,
     method: 'view_solution_found_count',
-    args: {},
+    args: [],
   })
+
+  // console.log('🚀 ~ file: index.tsx ~ line 28 ~ solutionCountValue', solutionCountValue)
+
   const html_string = CallContractStringifyReturn(gameContract, 'view_solution_records_as_html')
   const {
     data,
@@ -69,13 +72,7 @@ const Home: NextPage = () => {
       let move_x_str = move_x.toString()
       let move_y_str = move_y.toString()
 
-      invokeSubmitMoveForLevel({
-        args: {
-          level: data['levelRequired'],
-          move_x: move_x_str,
-          move_y: move_y_str,
-        },
-      })
+      invokeSubmitMoveForLevel({ args: [data['levelRequired'], move_x_str, move_y_str] })
       console.log('submit move: ', data['levelRequired'], move_x_str, move_y_str)
     }
   }
@@ -123,7 +120,7 @@ const Home: NextPage = () => {
       <h3>System status</h3>
       <p>
         {' '}
-        {'>'} Number of solutions found: {solutionCountValue?.count}
+        {'>'} Number of solutions found: {solutionCountValue?.[0].toString()}
       </p>
       <div>
         {' '}
