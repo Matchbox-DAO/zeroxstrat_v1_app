@@ -74,7 +74,7 @@ export function htmlParse(str: string | undefined) {
 // https://stackoverflow.com/questions/14603205/how-to-convert-hex-string-into-a-bytes-array-and-a-bytes-array-in-the-hex-strin
 function hexToBytes(hex: string) {
   let bytes: Array<number> = []
-  for (let c = 0; c < hex.length; c += 2) bytes.push(parseInt(hex.substring(c, 2), 16))
+  for (let c = 0; c < hex.length; c += 2) bytes.push(parseInt(hex.substr(c, 2), 16))
   return bytes
 }
 
