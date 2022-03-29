@@ -1,5 +1,4 @@
-{
-    "abi": [
+[
     {
         "members": [
             {
@@ -74,18 +73,28 @@
                 "type": "felt"
             },
             {
-                "name": "solution_family",
+                "name": "level",
                 "offset": 1,
                 "type": "felt"
             },
             {
-                "name": "score",
+                "name": "solution_family",
                 "offset": 2,
+                "type": "felt"
+            },
+            {
+                "name": "score",
+                "offset": 3,
+                "type": "felt"
+            },
+            {
+                "name": "block_number",
+                "offset": 4,
                 "type": "felt"
             }
         ],
         "name": "SolutionRecord",
-        "size": 3,
+        "size": 5,
         "type": "struct"
     },
     {
@@ -155,6 +164,22 @@
     },
     {
         "inputs": [],
+        "name": "view_solution_records",
+        "outputs": [
+            {
+                "name": "records_len",
+                "type": "felt"
+            },
+            {
+                "name": "records",
+                "type": "SolutionRecord*"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "view_solution_records_as_html",
         "outputs": [
             {
@@ -210,4 +235,3 @@
         "type": "function"
     }
 ]
-}

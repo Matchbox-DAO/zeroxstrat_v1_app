@@ -9,8 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@argent/get-starknet": "^2.1.1",
-    "@starknet-react/core": "^0.6.2",
+    "@argent/get-starknet": "^3.0.1",
+    "@starknet-react/core": "^0.6.3",
     "babel-preset-next": "^1.4.0",
     "emotion": "^11.0.0",
     "html-react-parser": "^1.4.8",
@@ -38,6 +38,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.29.3",
+    "prettier": "^2.6.1",
     "typescript": "4.5.5"
   }
 }
