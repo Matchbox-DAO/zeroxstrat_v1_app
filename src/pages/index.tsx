@@ -6,7 +6,7 @@ import {
   Transaction,
 } from '@starknet-react/core'
 import type { NextPage } from 'next'
-import { ConnectWallet } from '~/components/ConnectWallet'
+import { ConnectWalletButton } from '~/components/ConnectWallet'
 import { BigNumber } from 'bignumber.js'
 import { CallContractStringifyReturn, htmlParse } from '~/components/Contracts'
 import { useGameContract } from '~/hooks/game'
