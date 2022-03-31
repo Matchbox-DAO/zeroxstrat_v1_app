@@ -1,4 +1,4 @@
-import { useStarknet, useStarknetTransactionManager, Transaction } from '@starknet-react/core'
+import { useStarknet, useStarknetTransactionManager } from '@starknet-react/core'
 import type { NextPage } from 'next'
 import { BigNumber } from 'bignumber.js'
 import { useForm, Controller } from 'react-hook-form'
@@ -8,6 +8,7 @@ import TypewriterComponent from 'typewriter-effect'
 import LevelSelect from '~/components/LevelSelect'
 import React from 'react'
 import useSolutionSubmitCallback from '~/hooks/useSolutionSubmitCallback'
+import { useS2MTransactionManager, Transaction } from '~/providers/transaction'
 
 const HomeWrapper = styled.div`
   min-height: 80vh;
@@ -202,14 +203,14 @@ const Home: NextPage = () => {
           <p>[tx status] Error: {error || 'No error'}</p>
         </div> */}
 
-        {/* <DemoTransactionManager /> */}
+        <DemoTransactionManager />
       </div>
     </HomeWrapper>
   )
 }
 
 function DemoTransactionManager() {
-  const { transactions, removeTransaction } = useStarknetTransactionManager()
+  const { transactions, removeTransaction } = useS2MTransactionManager()
   return (
     <div>
       <h3>Transaction Manager</h3>
@@ -227,7 +228,7 @@ function DemoTransactionManager() {
 function TransactionItem({ transaction, onClick }: { transaction: Transaction; onClick: () => void }) {
   return (
     <div>
-      {transaction.status}: {transaction.transactionHash} <button onClick={onClick}>remove</button>
+      {transaction.status}: {transaction.summary} <button onClick={onClick}>remove</button>
     </div>
   )
 }
