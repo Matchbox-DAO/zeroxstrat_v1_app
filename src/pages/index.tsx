@@ -155,15 +155,8 @@ const Home: NextPage = () => {
             A puzzle game built in Cairo
           </CairoText.mediumBody>
         </TitleContainer>
-        {/* <p>Contract address (testnet): {snsContract?.connectedTo}</p> */}
-
-        {/* <ShowNameLookup /> */}
 
         <StyledForm onSubmit={handleSubmit((inputData) => onSubmitMove(inputData))}>
-          {/* register your input into the hook by invoking the "register" function */}
-          {/* include validation with required or other standard HTML validation rules */}
-          {/* errors will return when field validation fails  */}
-
           <StyledInputSection>
             <LevelSelect control={control} />
 
@@ -212,60 +205,6 @@ const Home: NextPage = () => {
       </div>
     </HomeWrapper>
   )
-
-  // return (
-  //   <div>
-  //     <h3>Argent X Wallet</h3>
-  //     <ConnectWallet />
-
-  //     <h3>0xstrat v1.0</h3>
-  //     <p>:: a Class B solve2mint system ::</p>
-  //     <p>
-  //       {' '}
-  //       powered by{' '}
-  //       <a href="https://github.com/topology-gg/fountain" target="_blank" rel="noopener noreferrer">
-  //         Fountain
-  //       </a>
-  //       , a mini physics engine in Cairo
-  //     </p>
-
-  //     {/* <h3>View level</h3>
-  //     <form onSubmit={handleSubmit(onSubmitLevel)}>
-  //       <input defaultValue="level id" {...register("levelRequired", { required: true })} />
-  //       {errors.levelRequired && <span> (This field is required) </span>}
-
-  //       <input type="submit" />
-  //     </form> */}
-
-  //     <h3>Make move</h3>
-  //     <p>level id: 0 or 1</p>
-  //     <p>move.x & move.y: float; check `game.cairo` for constraints</p>
-  //     <form onSubmit={handleSubmit(onSubmitMove)}>
-  //       <input placeholder="level id" {...register('levelRequired', { required: true })} />
-  //       {errors.levelRequired && <span> (This field is required) </span>}
-
-  //       <input placeholder="move.x" {...register('moveXRequired', { required: true })} />
-  //       {errors.moveXRequired && <span> (This field is required) </span>}
-
-  //       <input placeholder="move.y" {...register('moveYRequired', { required: true })} />
-  //       {errors.moveYRequired && <span> (This field is required) </span>}
-
-  //       <input type="submit" />
-  //     </form>
-
-  //     <h3>System status</h3>
-  //     <p>
-  //       {' '}
-  //       {'>'} Number of solutions found: {solutionCountValue?.[0].toString()}
-  //     </p>
-  //     <div>
-  //       {' '}
-  //       {'>'} Scoreboard: {htmlParse(html_string)}
-  //     </div>
-
-  //     <DemoTransactionManager />
-  //   </div>
-  // )
 }
 
 function DemoTransactionManager() {
