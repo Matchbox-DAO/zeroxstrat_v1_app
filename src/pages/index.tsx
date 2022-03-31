@@ -1,10 +1,4 @@
-import {
-  useStarknet,
-  useStarknetCall,
-  useStarknetInvoke,
-  useStarknetTransactionManager,
-  Transaction,
-} from '@starknet-react/core'
+import { useStarknet, useStarknetTransactionManager, Transaction } from '@starknet-react/core'
 import type { NextPage } from 'next'
 import { BigNumber } from 'bignumber.js'
 import { useForm, Controller } from 'react-hook-form'
@@ -106,9 +100,6 @@ const StyledForm = styled.form`
   justify-content: center;
 `
 
-const PRIME_BN = new BigNumber('3618502788666131213697322783095070105623107215331596699973092056135872020481')
-const FP_BN = new BigNumber(10 ** 12)
-
 const Home: NextPage = () => {
   const { account } = useStarknet()
   const {
@@ -171,7 +162,13 @@ const Home: NextPage = () => {
               maxLength={79}
               spellCheck="false"
               placeholder="move.x"
-              {...register('moveXRequired', { required: true, valueAsNumber: true })}
+              {...register('moveXRequired', {
+                required: true,
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: 'Please enter a number',
+                },
+              })}
             />
 
             <NameInput
@@ -185,7 +182,13 @@ const Home: NextPage = () => {
               maxLength={79}
               spellCheck="false"
               placeholder="move.y"
-              {...register('moveYRequired', { required: true, valueAsNumber: true })}
+              {...register('moveYRequired', {
+                required: true,
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: 'Please enter a number',
+                },
+              })}
             />
           </StyledInputSection>
 
