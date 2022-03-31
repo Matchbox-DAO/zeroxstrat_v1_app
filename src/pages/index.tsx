@@ -18,6 +18,8 @@ import LevelSelect from '~/components/LevelSelect'
 import NumericalInput from '~/components/NumericalInput'
 import React from 'react'
 import { ConnectWalletButton } from '~/components/ConnectWalletButton'
+import Scoreboard from '~/components/Scoreboard'
+import Footer from '~/components/Footer'
 
 const HomeWrapper = styled.div`
   min-height: 80vh;
@@ -129,7 +131,7 @@ const Home: NextPage = () => {
     args: [],
   })
 
-  // console.log('🚀 ~ file: index.tsx ~ line 28 ~ solutionCountValue', solutionCountValue)
+  // console.log('🚀 ~ file: Footer.tsx ~ line 28 ~ solutionCountValue', solutionCountValue)
 
   const html_string = CallContractStringifyReturn(gameContract, 'view_solution_records_as_html')
   const {
@@ -181,6 +183,7 @@ const Home: NextPage = () => {
     <HomeWrapper>
       <div style={{ margin: '0px auto', minWidth: '60%' }}>
         <TitleContainer>
+          Matchbox DAO presents:
           <TypewriterComponent
             onInit={(typewriter) => typewriter.typeString('Solve2Mint').pause().start()}
             options={{
@@ -240,7 +243,8 @@ const Home: NextPage = () => {
             </CairoText.largeHeader>
           </SubmitButton>
         </StyledForm>
-
+        <Scoreboard />
+        <Footer />
         {/* <div>
           <p>[tx status] Submitting: {loading ? 'Submitting' : 'Not Submitting'}</p>
           <p>[tx status] Error: {error || 'No error'}</p>
