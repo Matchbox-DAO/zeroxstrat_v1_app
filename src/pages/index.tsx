@@ -157,7 +157,6 @@ const Home: NextPage = () => {
               autoCorrect="off"
               // text-specific options
               type="text"
-              pattern="[0-9]*[.,]?[0-9]*$"
               minLength={1}
               maxLength={79}
               spellCheck="false"
@@ -165,7 +164,7 @@ const Home: NextPage = () => {
               {...register('moveXRequired', {
                 required: true,
                 pattern: {
-                  value: /^[0-9]+$/,
+                  value: /^-?[0-9]+$/,
                   message: 'Please enter a number',
                 },
               })}
@@ -177,7 +176,6 @@ const Home: NextPage = () => {
               autoCorrect="off"
               // text-specific options
               type="text"
-              pattern="[0-9]*[.,]?[0-9]*$"
               minLength={1}
               maxLength={79}
               spellCheck="false"
@@ -185,7 +183,7 @@ const Home: NextPage = () => {
               {...register('moveYRequired', {
                 required: true,
                 pattern: {
-                  value: /^[0-9]+$/,
+                  value: /^-?[0-9]+$/,
                   message: 'Please enter a number',
                 },
               })}
