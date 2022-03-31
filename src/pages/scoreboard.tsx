@@ -4,7 +4,6 @@ import { useStarknetCall } from '@starknet-react/core'
 import { useGameContract } from '~/hooks/game'
 import styled from 'styled-components'
 import { CairoText } from '~/theme'
-import { ConnectWallet } from '~/components/ConnectWallet'
 import { useTable, useSortBy, Column } from 'react-table'
 
 const HomeWrapper = styled.div`
