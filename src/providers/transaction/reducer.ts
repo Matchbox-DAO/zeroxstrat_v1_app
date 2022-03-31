@@ -1,10 +1,11 @@
 import { GetTransactionResponse } from 'starknet'
 import { List } from 'immutable'
-import { PopupContent, Transaction, TransactionSubmitted } from './model'
+import { PopupContent, Transaction, TransactionSubmitted, PopupListItem } from './model'
+import { nanoid } from 'nanoid'
 
 export interface TransactionManagerState {
   transactions: List<Transaction>
-  popupList: List<PopupContent>
+  popupList: List<PopupListItem>
 }
 
 interface AddTransaction {
@@ -25,12 +26,12 @@ interface UpdateTransaction {
 
 interface AddPopup {
   type: 'add_popup'
-  popupContent: PopupContent
+  popupListItem: { key?: string; removeAfterMs?: number | null; content: PopupContent }
 }
 
 interface RemovePopup {
   type: 'remove_popup'
-  transactionHash: string
+  key: string
 }
 
 export type Action = AddTransaction | RemoveTransaction | UpdateTransaction | AddPopup | RemovePopup
@@ -76,14 +77,30 @@ export function transactionManagerReducer(state: TransactionManagerState, action
       transactions: state.transactions.set(transactionIndex, newTransaction),
     }
   } else if (action.type === 'add_popup') {
+    const { key, content, removeAfterMs } = action.popupListItem
+
+    const popupList = (key ? state.popupList.filter((popup) => popup.key !== key) : state.popupList).concat([
+      {
+        key: key || nanoid(),
+        show: true,
+        content,
+        removeAfterMs: removeAfterMs ?? 10000,
+      },
+    ])
+
     return {
       ...state,
-      popupList: state.popupList.push(action.popupContent),
+      popupList: popupList,
     }
+
+    // return {
+    //   ...state,
+    //   popupList: state.popupList.push(action.popupListItem),
+    // }
   } else if (action.type === 'remove_popup') {
     return {
       ...state,
-      popupList: state.popupList.filter((popup) => popup.transactionHash !== action.transactionHash),
+      popupList: state.popupList.filter((popup) => popup.key !== action.key),
     }
   }
   return state

@@ -2,12 +2,12 @@ import React, { useCallback, useEffect, useReducer } from 'react'
 import { List } from 'immutable'
 import { useStarknet } from '@starknet-react/core'
 import { TransactionManagerContext } from './context'
-import { PopupContent, Transaction, TransactionSubmitted } from './model'
+import { PopupContent, PopupListItem, Transaction, TransactionSubmitted } from './model'
 import { transactionManagerReducer, TransactionManagerState } from './reducer'
 
 function shouldRefreshTransaction(transaction: Transaction, now: number): boolean {
   // try to get transaction data as soon as possible
-  if (transaction.status === 'TRANSACTION_RECEIVED') {
+  if (transaction.status === 'TRANSACTION_RECEIVED' || transaction.status === 'RECEIVED') {
     return true
   }
 
@@ -29,19 +29,56 @@ interface S2MTransactionManagerProviderProps {
   interval?: number
 }
 
-export function S2MTransactionManagerProvider({ children, interval }: S2MTransactionManagerProviderProps): JSX.Element {
+export function S2MTransactionManagerProvider({
+  children,
+  interval = 5000,
+}: S2MTransactionManagerProviderProps): JSX.Element {
   const { library } = useStarknet()
 
   const [state, dispatch] = useReducer(transactionManagerReducer, {
     transactions: List<Transaction>(),
-    popupList: List<PopupContent>(),
+    popupList: List<PopupListItem>(),
   })
 
   const refresh = useCallback(
+    async (transaction: Transaction) => {
+      try {
+        const transactionResponse = await library.getTransaction(transaction.transactionHash)
+        const lastUpdatedAt = Date.now()
+
+        if (transaction.status !== transactionResponse.status) {
+          dispatch({ type: 'update_transaction', transactionResponse, lastUpdatedAt })
+
+          if (
+            transactionResponse.status !== 'NOT_RECEIVED' &&
+            transactionResponse.status !== 'PENDING' &&
+            transactionResponse.status !== 'ACCEPTED_ON_L1'
+          ) {
+            dispatch({
+              type: 'add_popup',
+              popupListItem: {
+                content: {
+                  status: transactionResponse.status,
+                  summary: transaction.summary,
+                  transactionHash: transaction.transactionHash,
+                },
+              },
+            })
+          }
+        }
+      } catch (err) {
+        console.error(err)
+      }
+    },
+    [library, dispatch]
+  )
+
+  const refreshByTxHash = useCallback(
     async (transactionHash: string) => {
       try {
         const transactionResponse = await library.getTransaction(transactionHash)
         const lastUpdatedAt = Date.now()
+
         dispatch({ type: 'update_transaction', transactionResponse, lastUpdatedAt })
       } catch (err) {
         console.error(err)
@@ -54,7 +91,7 @@ export function S2MTransactionManagerProvider({ children, interval }: S2MTransac
     const now = Date.now()
     for (const transaction of state.transactions.toArray()) {
       if (shouldRefreshTransaction(transaction, now)) {
-        refresh(transaction.transactionHash)
+        refresh(transaction)
       }
     }
   }, [state.transactions, refresh])
@@ -73,11 +110,15 @@ export function S2MTransactionManagerProvider({ children, interval }: S2MTransac
     [dispatch]
   )
 
+  const removePopup = useCallback((key: string) => {
+    dispatch({ type: 'remove_popup', key })
+  }, [])
+
   const refreshTransaction = useCallback(
     (transactionHash: string) => {
-      refresh(transactionHash)
+      refreshByTxHash(transactionHash)
     },
-    [refresh]
+    [refreshByTxHash]
   )
 
   // periodically refresh all transactions.
@@ -87,7 +128,7 @@ export function S2MTransactionManagerProvider({ children, interval }: S2MTransac
     refreshAllTransactions()
     const intervalId = setInterval(() => {
       refreshAllTransactions()
-    }, interval ?? 5000)
+    }, interval)
     return () => clearInterval(intervalId)
   }, [interval, refreshAllTransactions])
 
@@ -95,9 +136,11 @@ export function S2MTransactionManagerProvider({ children, interval }: S2MTransac
     <TransactionManagerContext.Provider
       value={{
         transactions: state.transactions.toArray(),
+        popupList: state.popupList.toArray(),
         addTransaction,
         removeTransaction,
         refreshTransaction,
+        removePopup,
       }}
     >
       {children}
