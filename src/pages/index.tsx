@@ -1,13 +1,11 @@
 import { useStarknet, useStarknetTransactionManager, Transaction } from '@starknet-react/core'
 import type { NextPage } from 'next'
-import { BigNumber } from 'bignumber.js'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import styled from 'styled-components'
 import { CairoText } from '~/theme'
 import TypewriterComponent from 'typewriter-effect'
 import LevelSelect from '~/components/LevelSelect'
-import React from 'react'
-import { ConnectWalletButton } from '~/components/ConnectWalletButton'
+import React, { useState } from 'react'
 import Scoreboard from '~/components/Scoreboard'
 import Footer from '~/components/Footer'
 import useSolutionSubmitCallback from '~/hooks/useSolutionSubmitCallback'
@@ -18,8 +16,6 @@ const HomeWrapper = styled.div`
   flex-direction: column;
   padding-top: 150px;
   position: relative;
-  /* justify-content: center;
-  align-items: center; */
 `
 
 const TitleContainer = styled.div`
@@ -43,11 +39,6 @@ const TitleContainer = styled.div`
     line-height: 150%;
     letter-spacing: 0.04em;
   }
-`
-
-const TitlePrimary = styled.div`
-  font-size: 60px;
-  font-weight: 700;
 `
 
 const NameInput = styled.input`
@@ -111,7 +102,10 @@ const Home: NextPage = () => {
     control,
     formState: { isValid },
     resetField,
-  } = useForm({ mode: 'onChange' })
+  } = useForm({
+    mode: 'onChange',
+  })
+  const [level, setLevel] = useState<string | undefined>(undefined)
 
   const solutionSubmitCallback = useSolutionSubmitCallback()
 
@@ -150,7 +144,7 @@ const Home: NextPage = () => {
 
         <StyledForm onSubmit={handleSubmit((inputData) => onSubmitMove(inputData))}>
           <StyledInputSection>
-            <LevelSelect control={control} />
+            <LevelSelect control={control} setLevel={setLevel} />
 
             <NameInput
               inputMode="decimal"
@@ -197,7 +191,7 @@ const Home: NextPage = () => {
             </CairoText.largeHeader>
           </SubmitButton>
         </StyledForm>
-        <Scoreboard />
+        <Scoreboard level={level} />
         <Footer />
         {/* <div>
           <p>[tx status] Submitting: {loading ? 'Submitting' : 'Not Submitting'}</p>

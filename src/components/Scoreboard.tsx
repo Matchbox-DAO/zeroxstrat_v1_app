@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import type { NextPage } from 'next'
 import { useStarknetCall } from '@starknet-react/core'
 import { useGameContract } from '~/hooks/game'
 import styled from 'styled-components'
@@ -14,9 +13,20 @@ const TitleContainer = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 30px;
-
   font-weight: 500;
   margin-top: 60px;
+  margin-bottom: 60px;
+`
+
+const LevelNotFoundContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  text-decoration: underline;
+  font-weight: 500;
+  margin-top: 30px;
   margin-bottom: 60px;
 `
 
@@ -143,7 +153,14 @@ const Table = ({ columns, data }: { columns: Column[]; data: any }) => {
   )
 }
 
-const Scoreboard: NextPage = () => {
+interface ScoresInterface {
+  address: string
+  score: number
+  solution: number
+  level: number
+}
+
+const Scoreboard = ({ level }: { level?: string }) => {
   const { contract: gameContract } = useGameContract()
 
   const { data, error } = useStarknetCall({
@@ -154,8 +171,10 @@ const Scoreboard: NextPage = () => {
 
   const scores = useMemo(() => {
     if (!data || error) return []
-    return data[0]
-      .map((item) => {
+    let levelIdx = 0
+    let levelCount = 0
+    const formattedData = data[0]
+      .map((item): ScoresInterface => {
         const score = Number(item.score)
         const level = Number(item.level)
         const solution = Number(item.solution_family)
@@ -164,15 +183,30 @@ const Scoreboard: NextPage = () => {
         return { score, level, solution, address }
       })
       .sort((a, b) => b.level - a.level)
-  }, [data, error])
 
-  return (
-    <>
-      <TitleContainer>
-        <CairoText.largeHeader fontWeight={600} fontSize={30} style={{ color: '#222' }}>
-          LEARDERBOARD
-        </CairoText.largeHeader>
-      </TitleContainer>
+    if (!level && formattedData.length > 0) {
+      const clearedByLevel: ScoresInterface[] = []
+      formattedData.forEach((item) => {
+        if (item.level !== levelIdx) {
+          levelCount = 0
+          levelIdx = item.level
+        }
+        if (item.level === levelIdx && levelCount < 5) {
+          clearedByLevel.push(item)
+          levelCount++
+        }
+      })
+      return clearedByLevel
+    }
+
+    if (level) {
+      return formattedData.filter((item) => item.level === Number(level))
+    }
+    return formattedData ?? []
+  }, [data, error, level])
+
+  const table = useMemo(
+    () => (
       <Table
         columns={[
           {
@@ -194,6 +228,21 @@ const Scoreboard: NextPage = () => {
         ]}
         data={scores}
       />
+    ),
+    [scores]
+  )
+
+  return (
+    <>
+      <TitleContainer>
+        <CairoText.largeHeader fontWeight={600} fontSize={30} style={{ color: '#222' }}>
+          LEARDERBOARD
+        </CairoText.largeHeader>
+      </TitleContainer>
+      {table}
+      {level && !scores.length && !error ? (
+        <LevelNotFoundContainer>No one found the solution for this level yet. Be the first one!</LevelNotFoundContainer>
+      ) : null}
     </>
   )
 }
