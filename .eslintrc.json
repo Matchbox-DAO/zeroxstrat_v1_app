@@ -28,6 +28,8 @@
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": ["off"],
     "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
-    "react-hooks/exhaustive-deps": "warn"
+    "react-hooks/exhaustive-deps": "warn",
+    // suppress errors for missing 'import React' in files
+    "react/react-in-jsx-scope": "off"
   }
 }

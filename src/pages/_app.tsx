@@ -3,8 +3,11 @@ import NextHead from 'next/head'
 import { FixedGlobalStyle, ThemedGlobalStyle } from '../theme'
 import { StarknetProvider } from '@starknet-react/core'
 import Header from '~/components/Header'
+import { BigNumber } from 'bignumber.js'
 
 function MyApp({ Component, pageProps }: AppProps) {
+  BigNumber.config({ EXPONENTIAL_AT: 76 })
+
   return (
     <StarknetProvider>
       <NextHead>

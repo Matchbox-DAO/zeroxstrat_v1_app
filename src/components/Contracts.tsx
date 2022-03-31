@@ -26,11 +26,11 @@ export function CallContractStringifyReturn(contract: Contract | undefined, meth
         })
         .then((res) => {
           let recovered_string = ''
-          let hexstr_array = res.result.slice(1)
-          for (var i = 0; i < hexstr_array.length; i++) {
-            let str = hexstr_array[i].slice(2)
-            let bytes = hexToBytes(str)
-            let s = bin2String(bytes)
+          const hexstr_array = res.result.slice(1)
+          for (let i = 0; i < hexstr_array.length; i++) {
+            const str = hexstr_array[i].slice(2)
+            const bytes = hexToBytes(str)
+            const s = bin2String(bytes)
             recovered_string += s
           }
           setRet(recovered_string)
@@ -73,15 +73,15 @@ export function htmlParse(str: string | undefined) {
 
 // https://stackoverflow.com/questions/14603205/how-to-convert-hex-string-into-a-bytes-array-and-a-bytes-array-in-the-hex-strin
 function hexToBytes(hex: string) {
-  let bytes: Array<number> = []
+  const bytes: Array<number> = []
   for (let c = 0; c < hex.length; c += 2) bytes.push(parseInt(hex.substr(c, 2), 16))
   return bytes
 }
 
 // https://stackoverflow.com/questions/9939760/how-do-i-convert-an-integer-to-binary-in-javascript
 function bin2String(array: number[]) {
-  var result = ''
-  for (var i = 0; i < array.length; i++) {
+  let result = ''
+  for (let i = 0; i < array.length; i++) {
     result += String.fromCharCode(parseInt(array[i].toString(2), 2))
   }
   return result

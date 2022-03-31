@@ -1,22 +1,13 @@
-import {
-  useStarknet,
-  useStarknetCall,
-  useStarknetInvoke,
-  useStarknetTransactionManager,
-  Transaction,
-} from '@starknet-react/core'
+import { useStarknet, useStarknetTransactionManager, Transaction } from '@starknet-react/core'
 import type { NextPage } from 'next'
-import { ConnectWalletButton } from '~/components/ConnectWallet'
 import { BigNumber } from 'bignumber.js'
-import { CallContractStringifyReturn, htmlParse } from '~/components/Contracts'
-import { useGameContract } from '~/hooks/game'
 import { useForm, Controller } from 'react-hook-form'
 import styled from 'styled-components'
 import { CairoText } from '~/theme'
 import TypewriterComponent from 'typewriter-effect'
 import LevelSelect from '~/components/LevelSelect'
-import NumericalInput from '~/components/NumericalInput'
 import React from 'react'
+import useSolutionSubmitCallback from '~/hooks/useSolutionSubmitCallback'
 
 const HomeWrapper = styled.div`
   min-height: 80vh;
@@ -109,71 +100,31 @@ const StyledForm = styled.form`
   justify-content: center;
 `
 
-const PRIME_BN = new BigNumber('3618502788666131213697322783095070105623107215331596699973092056135872020481')
-const FP_BN = new BigNumber(10 ** 12)
-
 const Home: NextPage = () => {
   const { account } = useStarknet()
   const {
     register,
     handleSubmit,
-    watch,
     control,
-    formState: { errors, isValid },
+    formState: { isValid },
+    resetField,
   } = useForm({ mode: 'onChange' })
-  const { contract: gameContract } = useGameContract()
-  const { data: solutionCountValue } = useStarknetCall({
-    contract: gameContract,
-    method: 'view_solution_found_count',
-    args: [],
-  })
 
-  // console.log('🚀 ~ file: index.tsx ~ line 28 ~ solutionCountValue', solutionCountValue)
-
-  const html_string = CallContractStringifyReturn(gameContract, 'view_solution_records_as_html')
-  const {
-    data,
-    loading,
-    error,
-    reset,
-    invoke: invokeSubmitMoveForLevel,
-  } = useStarknetInvoke({
-    contract: gameContract,
-    method: 'submit_move_for_level',
-  })
-
-  // const onSubmitLevel = (data: any) => {
-  //   if (!account) {
-  //     console.log('user wallet not connected yet.')
-  //   }
-  //   else if (!gameContract) {
-  //     console.log('frontend not connected to game contract')
-  //   }
-  //   else {
-  //     const { data: levelValue } = useStarknetCall({ contract: gameContract, method: 'pull_level', args: { data: data['levelRequired'] } })
-  //     console.log('view level...', levelValue)
-  //   }
-  // }
+  const solutionSubmitCallback = useSolutionSubmitCallback()
 
   const onSubmitMove = (data: any) => {
     console.log(data)
-    // if (!account) {
-    //   console.log('user wallet not connected yet.')
-    // } else if (!gameContract) {
-    //   console.log('frontend not connected to game contract')
-    // } else {
-    //   BigNumber.config({ EXPONENTIAL_AT: 76 })
-    //   let data_movex_fp_bn = new BigNumber(data['moveXRequired']).multipliedBy(FP_BN)
-    //   let data_movey_fp_bn = new BigNumber(data['moveYRequired']).multipliedBy(FP_BN)
 
-    //   let move_x = data_movex_fp_bn.isPositive() ? data_movex_fp_bn : PRIME_BN.plus(data_movex_fp_bn)
-    //   let move_y = data_movey_fp_bn.isPositive() ? data_movey_fp_bn : PRIME_BN.plus(data_movey_fp_bn)
-    //   let move_x_str = move_x.toString()
-    //   let move_y_str = move_y.toString()
+    const level = data['level-select'].value
+    const X = data['moveXRequired']
+    const Y = data['moveYRequired']
 
-    //   invokeSubmitMoveForLevel({ args: [data['levelRequired'], move_x_str, move_y_str] })
-    //   console.log('submit move: ', data['levelRequired'], move_x_str, move_y_str)
-    // }
+    if (level && X && Y) {
+      solutionSubmitCallback(level, X, Y).then(() => {
+        resetField('moveXRequired')
+        resetField('moveYRequired')
+      })
+    }
   }
 
   return (
@@ -195,15 +146,8 @@ const Home: NextPage = () => {
             A puzzle game built in Cairo
           </CairoText.mediumBody>
         </TitleContainer>
-        {/* <p>Contract address (testnet): {snsContract?.connectedTo}</p> */}
-
-        {/* <ShowNameLookup /> */}
 
         <StyledForm onSubmit={handleSubmit((inputData) => onSubmitMove(inputData))}>
-          {/* register your input into the hook by invoking the "register" function */}
-          {/* include validation with required or other standard HTML validation rules */}
-          {/* errors will return when field validation fails  */}
-
           <StyledInputSection>
             <LevelSelect control={control} />
 
@@ -218,7 +162,13 @@ const Home: NextPage = () => {
               maxLength={79}
               spellCheck="false"
               placeholder="move.x"
-              {...register('moveXRequired', { required: true, valueAsNumber: true })}
+              {...register('moveXRequired', {
+                required: true,
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: 'Please enter a number',
+                },
+              })}
             />
 
             <NameInput
@@ -232,11 +182,17 @@ const Home: NextPage = () => {
               maxLength={79}
               spellCheck="false"
               placeholder="move.y"
-              {...register('moveYRequired', { required: true, valueAsNumber: true })}
+              {...register('moveYRequired', {
+                required: true,
+                pattern: {
+                  value: /^[0-9]+$/,
+                  message: 'Please enter a number',
+                },
+              })}
             />
           </StyledInputSection>
 
-          <SubmitButton disabled={!isValid} type="submit">
+          <SubmitButton disabled={!isValid || !account} type="submit">
             <CairoText.largeHeader fontWeight={600} fontSize={21}>
               Submit my move
             </CairoText.largeHeader>
@@ -252,60 +208,6 @@ const Home: NextPage = () => {
       </div>
     </HomeWrapper>
   )
-
-  // return (
-  //   <div>
-  //     <h3>Argent X Wallet</h3>
-  //     <ConnectWallet />
-
-  //     <h3>0xstrat v1.0</h3>
-  //     <p>:: a Class B solve2mint system ::</p>
-  //     <p>
-  //       {' '}
-  //       powered by{' '}
-  //       <a href="https://github.com/topology-gg/fountain" target="_blank" rel="noopener noreferrer">
-  //         Fountain
-  //       </a>
-  //       , a mini physics engine in Cairo
-  //     </p>
-
-  //     {/* <h3>View level</h3>
-  //     <form onSubmit={handleSubmit(onSubmitLevel)}>
-  //       <input defaultValue="level id" {...register("levelRequired", { required: true })} />
-  //       {errors.levelRequired && <span> (This field is required) </span>}
-
-  //       <input type="submit" />
-  //     </form> */}
-
-  //     <h3>Make move</h3>
-  //     <p>level id: 0 or 1</p>
-  //     <p>move.x & move.y: float; check `game.cairo` for constraints</p>
-  //     <form onSubmit={handleSubmit(onSubmitMove)}>
-  //       <input placeholder="level id" {...register('levelRequired', { required: true })} />
-  //       {errors.levelRequired && <span> (This field is required) </span>}
-
-  //       <input placeholder="move.x" {...register('moveXRequired', { required: true })} />
-  //       {errors.moveXRequired && <span> (This field is required) </span>}
-
-  //       <input placeholder="move.y" {...register('moveYRequired', { required: true })} />
-  //       {errors.moveYRequired && <span> (This field is required) </span>}
-
-  //       <input type="submit" />
-  //     </form>
-
-  //     <h3>System status</h3>
-  //     <p>
-  //       {' '}
-  //       {'>'} Number of solutions found: {solutionCountValue?.[0].toString()}
-  //     </p>
-  //     <div>
-  //       {' '}
-  //       {'>'} Scoreboard: {htmlParse(html_string)}
-  //     </div>
-
-  //     <DemoTransactionManager />
-  //   </div>
-  // )
 }
 
 function DemoTransactionManager() {
