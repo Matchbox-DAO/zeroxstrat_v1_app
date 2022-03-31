@@ -6,17 +6,14 @@ import {
   Transaction,
 } from '@starknet-react/core'
 import type { NextPage } from 'next'
-import { ConnectWalletButton } from '~/components/ConnectWallet'
 import { BigNumber } from 'bignumber.js'
-import { CallContractStringifyReturn, htmlParse } from '~/components/Contracts'
-import { useGameContract } from '~/hooks/game'
 import { useForm, Controller } from 'react-hook-form'
 import styled from 'styled-components'
 import { CairoText } from '~/theme'
 import TypewriterComponent from 'typewriter-effect'
 import LevelSelect from '~/components/LevelSelect'
-import NumericalInput from '~/components/NumericalInput'
 import React from 'react'
+import useSolutionSubmitCallback from '~/hooks/useSolutionSubmitCallback'
 
 const HomeWrapper = styled.div`
   min-height: 80vh;
@@ -117,63 +114,26 @@ const Home: NextPage = () => {
   const {
     register,
     handleSubmit,
-    watch,
     control,
-    formState: { errors, isValid },
+    formState: { isValid },
+    resetField,
   } = useForm({ mode: 'onChange' })
-  const { contract: gameContract } = useGameContract()
-  const { data: solutionCountValue } = useStarknetCall({
-    contract: gameContract,
-    method: 'view_solution_found_count',
-    args: [],
-  })
 
-  // console.log('🚀 ~ file: index.tsx ~ line 28 ~ solutionCountValue', solutionCountValue)
-
-  const html_string = CallContractStringifyReturn(gameContract, 'view_solution_records_as_html')
-  const {
-    data,
-    loading,
-    error,
-    reset,
-    invoke: invokeSubmitMoveForLevel,
-  } = useStarknetInvoke({
-    contract: gameContract,
-    method: 'submit_move_for_level',
-  })
-
-  // const onSubmitLevel = (data: any) => {
-  //   if (!account) {
-  //     console.log('user wallet not connected yet.')
-  //   }
-  //   else if (!gameContract) {
-  //     console.log('frontend not connected to game contract')
-  //   }
-  //   else {
-  //     const { data: levelValue } = useStarknetCall({ contract: gameContract, method: 'pull_level', args: { data: data['levelRequired'] } })
-  //     console.log('view level...', levelValue)
-  //   }
-  // }
+  const solutionSubmitCallback = useSolutionSubmitCallback()
 
   const onSubmitMove = (data: any) => {
     console.log(data)
-    // if (!account) {
-    //   console.log('user wallet not connected yet.')
-    // } else if (!gameContract) {
-    //   console.log('frontend not connected to game contract')
-    // } else {
-    //   BigNumber.config({ EXPONENTIAL_AT: 76 })
-    //   let data_movex_fp_bn = new BigNumber(data['moveXRequired']).multipliedBy(FP_BN)
-    //   let data_movey_fp_bn = new BigNumber(data['moveYRequired']).multipliedBy(FP_BN)
 
-    //   let move_x = data_movex_fp_bn.isPositive() ? data_movex_fp_bn : PRIME_BN.plus(data_movex_fp_bn)
-    //   let move_y = data_movey_fp_bn.isPositive() ? data_movey_fp_bn : PRIME_BN.plus(data_movey_fp_bn)
-    //   let move_x_str = move_x.toString()
-    //   let move_y_str = move_y.toString()
+    const level = data['level-select'].value
+    const X = data['moveXRequired']
+    const Y = data['moveYRequired']
 
-    //   invokeSubmitMoveForLevel({ args: [data['levelRequired'], move_x_str, move_y_str] })
-    //   console.log('submit move: ', data['levelRequired'], move_x_str, move_y_str)
-    // }
+    if (level && X && Y) {
+      solutionSubmitCallback(level, X, Y).then(() => {
+        resetField('moveXRequired')
+        resetField('moveYRequired')
+      })
+    }
   }
 
   return (
@@ -236,7 +196,7 @@ const Home: NextPage = () => {
             />
           </StyledInputSection>
 
-          <SubmitButton disabled={!isValid} type="submit">
+          <SubmitButton disabled={!isValid || !account} type="submit">
             <CairoText.largeHeader fontWeight={600} fontSize={21}>
               Submit my move
             </CairoText.largeHeader>
