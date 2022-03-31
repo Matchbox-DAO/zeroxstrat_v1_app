@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { ConnectWalletButton } from '../ConnectWallet'
+import { ConnectWalletButton } from '../ConnectWalletButton'
 
 const HeaderWrapper = styled.div`
   padding: 30px;
