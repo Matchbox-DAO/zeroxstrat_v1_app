@@ -7,6 +7,9 @@ import { CairoText } from '~/theme'
 import TypewriterComponent from 'typewriter-effect'
 import LevelSelect from '~/components/LevelSelect'
 import React from 'react'
+import { ConnectWalletButton } from '~/components/ConnectWalletButton'
+import Scoreboard from '~/components/Scoreboard'
+import Footer from '~/components/Footer'
 import useSolutionSubmitCallback from '~/hooks/useSolutionSubmitCallback'
 
 const HomeWrapper = styled.div`
@@ -131,6 +134,7 @@ const Home: NextPage = () => {
     <HomeWrapper>
       <div style={{ margin: '0px auto', minWidth: '60%' }}>
         <TitleContainer>
+          Matchbox DAO presents:
           <TypewriterComponent
             onInit={(typewriter) => typewriter.typeString('Solve2Mint').pause().start()}
             options={{
@@ -193,7 +197,8 @@ const Home: NextPage = () => {
             </CairoText.largeHeader>
           </SubmitButton>
         </StyledForm>
-
+        <Scoreboard />
+        <Footer />
         {/* <div>
           <p>[tx status] Submitting: {loading ? 'Submitting' : 'Not Submitting'}</p>
           <p>[tx status] Error: {error || 'No error'}</p>
