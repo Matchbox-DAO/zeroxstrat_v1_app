@@ -6,7 +6,7 @@ import {
   Transaction,
 } from '@starknet-react/core'
 import type { NextPage } from 'next'
-import { ConnectWalletButton } from '~/components/ConnectWallet'
+// import { ConnectWalletButton } from '~/components/ConnectWalletButton'
 import { BigNumber } from 'bignumber.js'
 import { CallContractStringifyReturn, htmlParse } from '~/components/Contracts'
 import { useGameContract } from '~/hooks/game'
@@ -17,6 +17,7 @@ import TypewriterComponent from 'typewriter-effect'
 import LevelSelect from '~/components/LevelSelect'
 import NumericalInput from '~/components/NumericalInput'
 import React from 'react'
+import { ConnectWalletButton } from '~/components/ConnectWalletButton'
 
 const HomeWrapper = styled.div`
   min-height: 80vh;
@@ -179,9 +180,6 @@ const Home: NextPage = () => {
   return (
     <HomeWrapper>
       <div style={{ margin: '0px auto', minWidth: '60%' }}>
-        {/* <h3>Argent X Wallet</h3> */}
-        <ConnectWallet />
-
         <TitleContainer>
           <TypewriterComponent
             onInit={(typewriter) => typewriter.typeString('Solve2Mint').pause().start()}

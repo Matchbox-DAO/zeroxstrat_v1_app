@@ -1,6 +1,6 @@
 import { useStarknet } from '@starknet-react/core'
 import { InjectedConnector } from '@starknet-react/core'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 const StyledButton = styled.button<{ error?: boolean }>`
@@ -25,13 +25,13 @@ const StyledButton = styled.button<{ error?: boolean }>`
 export function ConnectWalletButton() {
   const { account, connect, error } = useStarknet()
 
-  const injected = new InjectedConnector({ showModal: false })
+  const injected = useMemo(() => new InjectedConnector({ showModal: false }), [])
 
   useEffect(() => {
     setTimeout(() => {
       connect(injected)
     }, 200)
-  }, [connect])
+  }, [connect, injected])
 
   useEffect(() => {
     if (window.starknet) {
@@ -39,7 +39,7 @@ export function ConnectWalletButton() {
         connect(injected)
       })
     }
-  }, [connect])
+  }, [connect, injected])
 
   if (account) {
     const shortenedAddress = `${account.substring(0, 6)}...${account.substring(59)}`
