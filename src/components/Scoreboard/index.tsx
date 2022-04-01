@@ -56,7 +56,7 @@ export default function Scoreboard({ level }: { level?: string }) {
   })
 
   const scores = useMemo(() => {
-    if (!data || error) return []
+    if (!data) return []
     let levelIdx = 0
     let levelCount = 0
     const formattedData = data[0]
@@ -89,7 +89,7 @@ export default function Scoreboard({ level }: { level?: string }) {
       return formattedData.filter((item) => item.level === Number(level))
     }
     return formattedData ?? []
-  }, [data, error, level])
+  }, [data, level])
 
   const table = useMemo(
     () => (
