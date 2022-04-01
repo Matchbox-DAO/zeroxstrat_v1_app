@@ -32,10 +32,10 @@ const Footer = () => {
         <Link href="https://discord.gg/X2FSUngpwe" target="_blank">
           <Image width={imgSize} height={imgSize} src={discord} alt="Discord" objectFit="contain" />
         </Link>
-        <Link href="https://mirror.xyz/matchboxdao.eth/DzWa-8uOEdjp2BiW1kiA_yS82EXJDyJb-VqWeWALchc" target="_blank">
+        <Link href="https://mirror.xyz/matchboxdao.eth/XDHA0jqmdXvQDd247ebknsFkXGLG4VfSlGbcU2v6B10" target="_blank">
           <Image width={imgSize} height={imgSize} src={file} alt="Blog post" objectFit="contain" />
         </Link>
-        <Link href="https://github.com/Matchbox-DAO/zeroxstrat_v1_app" target="_blank">
+        <Link href="https://github.com/Matchbox-DAO/fountain/tree/v0.1/examples/puzzle_v1" target="_blank">
           <Image width={imgSize} height={imgSize} src={github} alt="Github" objectFit="contain" />
         </Link>
       </ImagesContainer>
