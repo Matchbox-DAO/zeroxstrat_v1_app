@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { useStarknetCall } from '@starknet-react/core'
 import { useGameContract } from '~/hooks/game'
 import styled from 'styled-components'
@@ -118,7 +118,7 @@ export default function Scoreboard({ level }: { level?: string }) {
     [scores]
   )
 
-  if (loading) {
+  if (loading || scores.length === 0) {
     return <LoadingText>Loading Leaderboard...</LoadingText>
   }
 

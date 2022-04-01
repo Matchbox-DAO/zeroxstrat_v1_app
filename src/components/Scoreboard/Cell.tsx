@@ -1,6 +1,6 @@
 import { useStarknetCall } from '@starknet-react/core'
 import BigNumber from 'bignumber.js'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSNSContract } from '~/hooks/sns'
 
 export default function Cell({ value }: { value: string | number }) {
@@ -24,7 +24,10 @@ export default function Cell({ value }: { value: string | number }) {
     }
   }, [data, name])
 
-  return <div>{name ? name : `${addressHex.slice(0, 6)}...${addressHex.slice(-4)}`}</div>
+  return useMemo(
+    () => <div>{name ? name : `${addressHex.slice(0, 6)}...${addressHex.slice(-4)}`}</div>,
+    [addressHex, name]
+  )
 }
 
 function hex2a(hex: string) {
