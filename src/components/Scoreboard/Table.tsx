@@ -9,9 +9,9 @@ const TableWrapper = styled.div`
   table {
     border-spacing: 0;
     border: 2px solid #222;
-    border-radius: 5px;
+    border-radius: 6px;
     color: #222;
-    background-color: transparent;
+    background-color: white;
     tr {
       :last-child {
         td {
