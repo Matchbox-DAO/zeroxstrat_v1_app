@@ -1,4 +1,4 @@
-import { useStarknet, useStarknetTransactionManager, Transaction } from '@starknet-react/core'
+import { useStarknet, useStarknetTransactionManager } from '@starknet-react/core'
 import type { NextPage } from 'next'
 import { BigNumber } from 'bignumber.js'
 import { useForm, Controller } from 'react-hook-form'
@@ -8,6 +8,8 @@ import TypewriterComponent from 'typewriter-effect'
 import LevelSelect from '~/components/LevelSelect'
 import React from 'react'
 import useSolutionSubmitCallback from '~/hooks/useSolutionSubmitCallback'
+import { useS2MTransactionManager, Transaction } from '~/providers/transaction'
+import Popups from '~/components/Popups'
 
 const HomeWrapper = styled.div`
   min-height: 80vh;
@@ -129,6 +131,7 @@ const Home: NextPage = () => {
 
   return (
     <HomeWrapper>
+      <Popups />
       <div style={{ margin: '0px auto', minWidth: '60%' }}>
         {/* <h3>Argent X Wallet</h3> */}
         {/* <ConnectWallet /> */}
@@ -205,30 +208,6 @@ const Home: NextPage = () => {
         {/* <DemoTransactionManager /> */}
       </div>
     </HomeWrapper>
-  )
-}
-
-function DemoTransactionManager() {
-  const { transactions, removeTransaction } = useStarknetTransactionManager()
-  return (
-    <div>
-      <h3>Transaction Manager</h3>
-      <div>
-        {transactions.length === 0
-          ? 'No transactions'
-          : transactions.map((tx, index) => (
-              <TransactionItem key={index} transaction={tx} onClick={() => removeTransaction(tx.transactionHash)} />
-            ))}
-      </div>
-    </div>
-  )
-}
-
-function TransactionItem({ transaction, onClick }: { transaction: Transaction; onClick: () => void }) {
-  return (
-    <div>
-      {transaction.status}: {transaction.transactionHash} <button onClick={onClick}>remove</button>
-    </div>
   )
 }
 

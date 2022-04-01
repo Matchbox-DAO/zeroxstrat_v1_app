@@ -3,11 +3,14 @@ import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import { AddTransactionResponse } from 'starknet'
 import { FP_BN, PRIME_BN } from '~/constants'
+import { useS2MTransactionManager } from '~/providers/transaction'
 import { useGameContract } from './game'
 
 export default function useSolutionSubmitCallback() {
   const { account } = useStarknet()
   const { contract } = useGameContract()
+
+  const { addTransaction } = useS2MTransactionManager()
 
   return useCallback(
     async (level?: string, X?: string, Y?: string) => {
@@ -37,11 +40,17 @@ export default function useSolutionSubmitCallback() {
         .invoke('submit_move_for_level', [level.toString(), moveX.toString(), moveY.toString()])
         .then((tx: AddTransactionResponse) => {
           console.log('Transaction hash: ', tx.transaction_hash)
+
+          const summary = `Solution with move X=${X} and Y=${Y}`
+
+          addTransaction({ status: tx.code, transactionHash: tx.transaction_hash, address: account, summary: summary })
+
+          return tx.transaction_hash
         })
         .catch((e) => {
           console.error(e)
         })
     },
-    [account, contract]
+    [account, addTransaction, contract]
   )
 }
