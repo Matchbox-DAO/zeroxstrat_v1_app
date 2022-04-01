@@ -162,7 +162,7 @@ const Home: NextPage = () => {
               {...register('moveXRequired', {
                 required: true,
                 pattern: {
-                  value: /^-?[0-9]+$/,
+                  value: /^-?\d+(\.\d+)?$/,
                   message: 'Please enter a number',
                 },
               })}
@@ -181,7 +181,7 @@ const Home: NextPage = () => {
               {...register('moveYRequired', {
                 required: true,
                 pattern: {
-                  value: /^-?[0-9]+$/,
+                  value: /^-?\d+(\.\d+)?$/,
                   message: 'Please enter a number',
                 },
               })}
