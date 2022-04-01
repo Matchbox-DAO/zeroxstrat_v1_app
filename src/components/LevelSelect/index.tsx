@@ -15,12 +15,12 @@ const options: LevelOption[] = [
   { value: '4', label: 'Level 4' },
 ]
 
-// export interface LevelSelectProps {
-//   name: string
-//   control: Control
-// }
+export interface LevelSelectProps {
+  control: Control
+  setLevel: (level: string) => void
+}
 
-export default function LevelSelect({ control }: { control: Control }) {
+export default function LevelSelect({ control, setLevel }: LevelSelectProps) {
   return (
     <Controller
       name="level-select"
@@ -37,7 +37,11 @@ export default function LevelSelect({ control }: { control: Control }) {
           options={options}
           value={options.find((option) => option.value === value)}
           onBlur={onBlur}
-          onChange={onChange}
+          onChange={(newValue) => {
+            onChange(newValue)
+            const v = newValue as LevelOption
+            setLevel(v.value)
+          }}
         />
       )}
     />
