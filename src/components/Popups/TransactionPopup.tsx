@@ -53,14 +53,14 @@ export default function TransactionPopup({
 
   const getStatusHeader = (status: Status) => {
     switch (status) {
-      case 'RECEIVED':
-        return 'Received'
+      // case 'RECEIVED':
+      //   return 'Submitted'
       case 'ACCEPTED_ON_L2':
-        return 'Confirmed'
+        return 'Successful'
       case 'ACCEPTED_ON_L1':
-        return 'Completed'
+        return 'Finalised'
       case 'REJECTED':
-        return 'Rejected'
+        return 'Failed'
       default:
         return 'Submitted'
     }
@@ -71,22 +71,14 @@ export default function TransactionPopup({
 
   return (
     <RowNoFlex>
-      {/* {status && getStatusIcon(status)} */}
       <AutoColumn gap="8px" style={{ marginTop: '1px' }}>
         <AutoRow>
           <StatusHeader style={{ paddingRight: 16 }} success={success} pending={pending}>
-            {/* {success ? <CheckCircle color={theme.green1} size={24} /> : <AlertCircle color={theme.red1} size={24} />} */}
-            {status ? `Transaction ${getStatusHeader(status)}` : `Transaction Submitted`}
+            {status ? `Solution ${getStatusHeader(status)}` : `Solution Submitted`}
           </StatusHeader>
         </AutoRow>
         <AutoColumn gap="12px">
           <TxSummary>{summary ?? 'Hash: ' + hash.slice(0, 8) + '...' + hash.slice(58, 65)}</TxSummary>
-          {/* {chainId && (
-            <StyledExternalLink href={getVoyagerLink(chainId, hash, 'transaction')}>
-              <span style={{ marginRight: '7px' }}>View on Voyager</span>
-              <LinkIcon size={20} style={{ color: '#50D5FF' }} />
-            </StyledExternalLink>
-          )} */}
         </AutoColumn>
       </AutoColumn>
     </RowNoFlex>
