@@ -141,7 +141,7 @@ const Home: NextPage = () => {
             }}
           />
           <CairoText.mediumBody fontWeight={600} fontSize={30} style={{ color: '#222' }}>
-            A puzzle game built in Cairo
+            Level Up Your Cairo
           </CairoText.mediumBody>
         </TitleContainer>
 
