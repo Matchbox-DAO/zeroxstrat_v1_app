@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <StarknetProvider>
       <S2MTransactionManagerProvider>
         <NextHead>
-          <title>0xstrat v1.0</title>
+          <title>Solve2Mint</title>
         </NextHead>
         <FixedGlobalStyle />
         <ThemedGlobalStyle />
