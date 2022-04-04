@@ -139,7 +139,7 @@ const Home: NextPage = () => {
       <Popups />
       <div style={{ margin: '0px auto', minWidth: '60%' }}>
         <TitleContainer>
-          Matchbox DAO presents:
+          Topology and Matchbox DAO presents:
           <Solve2MintTitle>Solve2Mint</Solve2MintTitle>
           <CairoText.mediumBody fontWeight={600} fontSize={30} style={{ color: '#222' }}>
             Level Up Your Cairo
