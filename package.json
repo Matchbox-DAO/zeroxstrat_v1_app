@@ -24,8 +24,7 @@
     "react-table": "^7.7.0",
     "rebass": "^4.0.7",
     "starknet": "^3.5.1",
-    "styled-components": "^5.3.3",
-    "typewriter-effect": "^2.18.2"
+    "styled-components": "^5.3.3"
   },
   "devDependencies": {
     "@types/bignumber.js": "^5.0.0",
