@@ -59,7 +59,8 @@ export default function Scoreboard({ level }: { level?: string }) {
     if (!data) return []
     let levelIdx = 0
     let levelCount = 0
-    const formattedData = data[0]
+
+    const formattedData = data[1]
       .map((item): ScoresInterface => {
         const score = Number(item.score)
         const level = Number(item.level)
@@ -118,7 +119,7 @@ export default function Scoreboard({ level }: { level?: string }) {
     [scores]
   )
 
-  if (loading || scores.length === 0) {
+  if (loading) {
     return <LoadingText>Loading Leaderboard...</LoadingText>
   }
 
@@ -130,8 +131,14 @@ export default function Scoreboard({ level }: { level?: string }) {
         </CairoText.largeHeader>
       </TitleContainer>
       {table}
-      {level && !scores.length && !error ? (
-        <LevelNotFoundContainer>No one found the solution for this level yet. Be the first one!</LevelNotFoundContainer>
+      {!scores.length && !error ? (
+        level ? (
+          <LevelNotFoundContainer>
+            No one has found the solution for this level yet. Be the first one!
+          </LevelNotFoundContainer>
+        ) : (
+          <LevelNotFoundContainer>No solution has been found yet. Be the first one!</LevelNotFoundContainer>
+        )
       ) : null}
     </>
   )
