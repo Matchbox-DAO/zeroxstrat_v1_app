@@ -3,13 +3,12 @@ import type { NextPage } from 'next'
 import { useForm } from 'react-hook-form'
 import styled from 'styled-components'
 import { CairoText } from '~/theme'
-// import TypewriterComponent from 'typewriter-effect'
 import LevelSelect from '~/components/LevelSelect'
 import React, { useState } from 'react'
 import Scoreboard from '~/components/Scoreboard'
 import Footer from '~/components/Footer'
 import useSolutionSubmitCallback from '~/hooks/useSolutionSubmitCallback'
-// import { useS2MTransactionManager, Transaction } from '~/providers/transaction'
+import { useS2MTransactionManager, Transaction } from '~/providers/transaction'
 import Popups from '~/components/Popups'
 
 const HomeWrapper = styled.div`
@@ -141,14 +140,6 @@ const Home: NextPage = () => {
       <div style={{ margin: '0px auto', minWidth: '60%' }}>
         <TitleContainer>
           Matchbox DAO presents:
-          {/*<TypewriterComponent*/}
-          {/*  onInit={(typewriter) => typewriter.typeString('Solve2Mint').pause().start()}*/}
-          {/*  options={{*/}
-          {/*    wrapperClassName: 'Typewriter__wrapper s2m__typewriter',*/}
-          {/*    cursorClassName: 'Typewriter__cursor s2m__typewriter__cursor',*/}
-          {/*    cursor: '_',*/}
-          {/*  }}*/}
-          {/*/>*/}
           <Solve2MintTitle>Solve2Mint</Solve2MintTitle>
           <CairoText.mediumBody fontWeight={600} fontSize={30} style={{ color: '#222' }}>
             Level Up Your Cairo
