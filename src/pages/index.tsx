@@ -3,7 +3,6 @@ import type { NextPage } from 'next'
 import { useForm } from 'react-hook-form'
 import styled from 'styled-components'
 import { CairoText } from '~/theme'
-import TypewriterComponent from 'typewriter-effect'
 import LevelSelect from '~/components/LevelSelect'
 import React, { useState } from 'react'
 import Scoreboard from '~/components/Scoreboard'
@@ -41,6 +40,15 @@ const TitleContainer = styled.div`
     line-height: 150%;
     letter-spacing: 0.04em;
   }
+`
+
+const Solve2MintTitle = styled.div`
+  font-size: 72px;
+  font-weight: 700;
+  font-family: 'Cairo', sans-serif;
+  text-transform: uppercase;
+  line-height: 150%;
+  letter-spacing: 0.04em;
 `
 
 const NameInput = styled.input`
@@ -131,15 +139,8 @@ const Home: NextPage = () => {
       <Popups />
       <div style={{ margin: '0px auto', minWidth: '60%' }}>
         <TitleContainer>
-          Matchbox DAO presents:
-          <TypewriterComponent
-            onInit={(typewriter) => typewriter.typeString('Solve2Mint').pause().start()}
-            options={{
-              wrapperClassName: 'Typewriter__wrapper s2m__typewriter',
-              cursorClassName: 'Typewriter__cursor s2m__typewriter__cursor',
-              cursor: '_',
-            }}
-          />
+          Topology and Matchbox DAO presents:
+          <Solve2MintTitle>Solve2Mint</Solve2MintTitle>
           <CairoText.mediumBody fontWeight={600} fontSize={30} style={{ color: '#222' }}>
             Level Up Your Cairo
           </CairoText.mediumBody>
