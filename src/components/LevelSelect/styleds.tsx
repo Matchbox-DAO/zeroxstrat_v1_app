@@ -42,6 +42,10 @@ export const StyledSelect = styled(Select)`
     padding: 0;
   }
 
+  .react-select__clear-indicator {
+    padding: 0;
+  }
+
   .react-select__value-container {
     padding: 0;
     padding-right: 5px;

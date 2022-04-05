@@ -40,8 +40,9 @@ export default function LevelSelect({ control, setLevel }: LevelSelectProps) {
           onChange={(newValue) => {
             onChange(newValue)
             const v = newValue as LevelOption
-            setLevel(v.value)
+            setLevel(v?.value)
           }}
+          isClearable
         />
       )}
     />

@@ -115,7 +115,7 @@ const Home: NextPage = () => {
   } = useForm({
     mode: 'onChange',
   })
-  const [level, setLevel] = useState<string | undefined>(undefined)
+  const [level, setLevel] = useState<string | undefined | null>(undefined)
 
   const solutionSubmitCallback = useSolutionSubmitCallback()
 
