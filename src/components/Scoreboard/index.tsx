@@ -61,7 +61,6 @@ export default function Scoreboard({ level }: { level?: string }) {
     args: [],
   })
 
-  console.log(data?.length, data)
   const scores = useMemo(() => {
     if (!data) return []
     let levelIdx = 0
