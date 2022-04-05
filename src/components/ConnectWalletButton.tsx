@@ -30,7 +30,7 @@ export function ConnectWalletButton() {
   useEffect(() => {
     setTimeout(() => {
       connect(injected)
-    }, 200)
+    }, 1500)
   }, [connect, injected])
 
   useEffect(() => {
