@@ -46,6 +46,12 @@ interface ScoresInterface {
   level: number
 }
 
+const extractArrayFromData = (data: any) => {
+  return data.find((item) => {
+    return Array.isArray(item)
+  })
+}
+
 export default function Scoreboard({ level }: { level?: string }) {
   const { contract: gameContract } = useGameContract()
 
@@ -60,8 +66,10 @@ export default function Scoreboard({ level }: { level?: string }) {
     let levelIdx = 0
     let levelCount = 0
 
-    const formattedData = data[1]
-      .map((item): ScoresInterface => {
+    const dataArray = extractArrayFromData(data)
+
+    const formattedData = dataArray
+      ?.map((item): ScoresInterface => {
         const score = Number(item.score)
         const level = Number(item.level)
         const solution = Number(item.solution_family)
@@ -71,7 +79,7 @@ export default function Scoreboard({ level }: { level?: string }) {
       })
       .sort((a, b) => b.level - a.level)
 
-    if (!level && formattedData.length > 0) {
+    if (!level && formattedData?.length > 0) {
       const clearedByLevel: ScoresInterface[] = []
       formattedData.forEach((item) => {
         if (item.level !== levelIdx) {
@@ -87,7 +95,7 @@ export default function Scoreboard({ level }: { level?: string }) {
     }
 
     if (level) {
-      return formattedData.filter((item) => item.level === Number(level))
+      return formattedData?.filter((item) => item.level === Number(level))
     }
     return formattedData ?? []
   }, [data, level])
