@@ -88,12 +88,12 @@ const Footer = () => {
         <SubImagesContainer>
           <LogoContainer logoSize={logoSize}>
             <Link href="https://twitter.com/topology_gg" target="_blank">
-              <Image width={logoSize} height={logoSize} src={topology} alt="Discord" objectFit="contain" />
+              <Image width={logoSize} height={logoSize} src={topology} alt="Topology" objectFit="contain" />
             </Link>
           </LogoContainer>
           <LogoContainer logoSize={logoSize}>
             <Link href="https://twitter.com/matchbox_dao" target="_blank">
-              <Image width={logoSize} height={logoSize} src={matchbox} alt="Discord" objectFit="contain" />
+              <Image width={logoSize} height={logoSize} src={matchbox} alt="matchbox DAO" objectFit="contain" />
             </Link>
           </LogoContainer>
         </SubImagesContainer>
