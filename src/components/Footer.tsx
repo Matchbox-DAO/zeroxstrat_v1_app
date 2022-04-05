@@ -4,7 +4,7 @@ import discord from '../assets/discord.png'
 import file from '../assets/file.png'
 import github from '../assets/github.png'
 import matchbox from '../assets/matchbox.png'
-import topology from '../assets/topology.png'
+import topology from '../assets/topologyWhite.png'
 import styled from 'styled-components'
 import { Link } from 'rebass'
 
@@ -47,7 +47,6 @@ const SubImagesContainer = styled.div`
 const Divider = styled.div`
   width: 100%;
   height: 1px;
-  //background-color: #801f1f;
   margin-top: 20px;
   margin-bottom: 20px;
 `
@@ -57,9 +56,17 @@ const TextContainer = styled.div`
   text-align: center;
   width: 100%;
 `
+
+const LogoContainer = styled.div`
+  border-radius: 10px;
+  overflow: hidden;
+  width: ${(props: { logoSize: number }) => props.logoSize}px;
+  height: ${(props: { logoSize: number }) => props.logoSize}px;
+`
+
 const Footer = () => {
   const imgSize = 40
-  const logosSize = 80
+  const logoSize = 80
   return (
     <>
       <FooterDiv>
@@ -79,14 +86,16 @@ const Footer = () => {
       <TextContainer> Brought to you by</TextContainer>
       <SubFooterDiv>
         <SubImagesContainer>
-          <Link href="https://twitter.com/topology_gg" target="_blank">
-            <Image width={logosSize} height={logosSize} src={topology} alt="Discord" objectFit="contain" />
-          </Link>
-          <div style={{ borderRadius: '10px', overflow: 'hidden', width: `${logosSize}px`, height: `${logosSize}px` }}>
-            <Link href="https://twitter.com/matchbox_dao" target="_blank">
-              <Image width={logosSize} height={logosSize} src={matchbox} alt="Discord" objectFit="contain" />
+          <LogoContainer logoSize={logoSize}>
+            <Link href="https://twitter.com/topology_gg" target="_blank">
+              <Image width={logoSize} height={logoSize} src={topology} alt="Discord" objectFit="contain" />
             </Link>
-          </div>
+          </LogoContainer>
+          <LogoContainer logoSize={logoSize}>
+            <Link href="https://twitter.com/matchbox_dao" target="_blank">
+              <Image width={logoSize} height={logoSize} src={matchbox} alt="Discord" objectFit="contain" />
+            </Link>
+          </LogoContainer>
         </SubImagesContainer>
       </SubFooterDiv>
     </>
