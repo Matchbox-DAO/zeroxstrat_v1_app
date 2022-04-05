@@ -52,7 +52,7 @@ const extractArrayFromData = (data: any) => {
   })
 }
 
-export default function Scoreboard({ level }: { level?: string }) {
+export default function Scoreboard({ level }: { level?: string | null }) {
   const { contract: gameContract } = useGameContract()
 
   const { data, error, loading } = useStarknetCall({
