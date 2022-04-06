@@ -8,14 +8,14 @@ export default function Cell({ value }: { value: string | number }) {
   const addressHex = addressNumber.toString(16)
   const [name, setName] = useState<string | undefined>(undefined)
   const { contract } = useSNSContract()
-  const { data, loading } = useStarknetCall({
+  const { data, loading, error } = useStarknetCall({
     contract,
     method: 'sns_lookup_adr_to_name',
     args: [`0x${addressHex}`],
   })
 
   useEffect(() => {
-    if (data && !loading) {
+    if (data && !loading && !error) {
       const isExists = Number(data['exist'])
       if (isExists === 1) {
         const hashName = new BigNumber(data['name']).toString(16)
@@ -24,7 +24,7 @@ export default function Cell({ value }: { value: string | number }) {
     } else {
       setName(`${addressHex.slice(0, 6)}...${addressHex.slice(-4)}`)
     }
-  }, [addressHex, data, loading])
+  }, [addressHex, data, error, loading])
 
   return useMemo(() => <div id={`cell-${addressHex}`}>{name}</div>, [addressHex, name])
 }
