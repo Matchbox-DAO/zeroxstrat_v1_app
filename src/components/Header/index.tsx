@@ -13,7 +13,7 @@ const HeaderWrapper = styled.div`
 
 const MenuWrapper = styled.div`
   position: absolute;
-  left: calc(50vw - 130px);
+  left: calc(50vw - 140px);
 
   display: flex;
   flex-direction: row;
