@@ -6,7 +6,6 @@ import { CairoText } from '~/theme'
 import LevelSelect from '~/components/LevelSelect'
 import React, { useState } from 'react'
 import Scoreboard from '~/components/Scoreboard'
-import Footer from '~/components/Footer'
 import useSolutionSubmitCallback from '~/hooks/useSolutionSubmitCallback'
 import { useS2MTransactionManager, Transaction } from '~/providers/transaction'
 import Popups from '~/components/Popups'
@@ -196,7 +195,6 @@ const Home: NextPage = () => {
           </SubmitButton>
         </StyledForm>
         <Scoreboard level={level} />
-        <Footer />
         {/* <div>
           <p>[tx status] Submitting: {loading ? 'Submitting' : 'Not Submitting'}</p>
           <p>[tx status] Error: {error || 'No error'}</p>

@@ -52,9 +52,62 @@ const extractArrayFromData = (data: any) => {
   })
 }
 
-export default function Scoreboard({ level }: { level?: string | null }) {
-  const { contract: gameContract } = useGameContract()
+const filterScoresWithoutPagination = (data: any[], level?: string | null) => {
+  let levelIdx = 0
+  let levelCount = 0
 
+  const dataArray = extractArrayFromData(data)
+
+  const formattedData = dataArray
+    ?.map((item): ScoresInterface => {
+      const score = Number(item.score)
+      const level = Number(item.level)
+      const solution = Number(item.solution_family)
+      const address = item.discovered_by
+
+      return { score, level, solution, address }
+    })
+    .sort((a, b) => b.level - a.level)
+
+  if (!level && formattedData?.length > 0) {
+    const clearedByLevel: ScoresInterface[] = []
+    formattedData.forEach((item) => {
+      if (item.level !== levelIdx) {
+        levelCount = 0
+        levelIdx = item.level
+      }
+      if (item.level === levelIdx && levelCount < 5) {
+        clearedByLevel.push(item)
+        levelCount++
+      }
+    })
+    return clearedByLevel
+  }
+
+  if (level) {
+    return formattedData?.filter((item) => item.level === Number(level))
+  }
+  return formattedData ?? []
+}
+
+const filterScoreWithPagination = (data: any[]) => {
+  const dataArray = extractArrayFromData(data)
+
+  const formattedData = dataArray
+    ?.map((item): ScoresInterface => {
+      const score = Number(item.score)
+      const level = Number(item.level)
+      const solution = Number(item.solution_family)
+      const address = item.discovered_by
+
+      return { score, level, solution, address }
+    })
+    .sort((a, b) => b.level - a.level)
+  return formattedData ?? []
+}
+
+export default function Scoreboard({ level, withPagination }: { level?: string | null; withPagination?: boolean }) {
+  const { contract: gameContract } = useGameContract()
   const { data, error, loading } = useStarknetCall({
     contract: gameContract,
     method: 'view_solution_records',
@@ -63,46 +116,17 @@ export default function Scoreboard({ level }: { level?: string | null }) {
 
   const scores = useMemo(() => {
     if (!data) return []
-    let levelIdx = 0
-    let levelCount = 0
 
-    const dataArray = extractArrayFromData(data)
-
-    const formattedData = dataArray
-      ?.map((item): ScoresInterface => {
-        const score = Number(item.score)
-        const level = Number(item.level)
-        const solution = Number(item.solution_family)
-        const address = item.discovered_by
-
-        return { score, level, solution, address }
-      })
-      .sort((a, b) => b.level - a.level)
-
-    if (!level && formattedData?.length > 0) {
-      const clearedByLevel: ScoresInterface[] = []
-      formattedData.forEach((item) => {
-        if (item.level !== levelIdx) {
-          levelCount = 0
-          levelIdx = item.level
-        }
-        if (item.level === levelIdx && levelCount < 5) {
-          clearedByLevel.push(item)
-          levelCount++
-        }
-      })
-      return clearedByLevel
+    if (withPagination) {
+      return filterScoreWithPagination(data)
     }
-
-    if (level) {
-      return formattedData?.filter((item) => item.level === Number(level))
-    }
-    return formattedData ?? []
-  }, [data, level])
+    return filterScoresWithoutPagination(data, level)
+  }, [data, level, withPagination])
 
   const table = useMemo(
     () => (
       <Table
+        withPagination={withPagination}
         columns={[
           {
             Header: 'Name',
@@ -124,7 +148,7 @@ export default function Scoreboard({ level }: { level?: string | null }) {
         data={scores}
       />
     ),
-    [scores]
+    [scores, withPagination]
   )
 
   if (loading) {
@@ -139,7 +163,7 @@ export default function Scoreboard({ level }: { level?: string | null }) {
         </CairoText.largeHeader>
       </TitleContainer>
       {table}
-      {!scores.length && !error ? (
+      {!scores.length && !error && !withPagination ? (
         level ? (
           <LevelNotFoundContainer>
             No one has found the solution for this level yet. Be the first one!

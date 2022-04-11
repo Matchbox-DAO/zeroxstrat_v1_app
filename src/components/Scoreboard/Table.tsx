@@ -1,6 +1,7 @@
-import { Column, useSortBy, useTable } from 'react-table'
+import { Column, usePagination, useSortBy, useTable } from 'react-table'
 import Cell from './Cell'
 import styled from 'styled-components'
+import { useState } from 'react'
 
 const TableWrapper = styled.div`
   display: flex;
@@ -34,8 +35,36 @@ const TableWrapper = styled.div`
   }
 `
 
-export default function Table({ columns, data }: { columns: Column[]; data: any }) {
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
+const PaginationButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+`
+
+const StyledButton = styled.button<{ disabled?: boolean }>`
+  padding: 5px 20px;
+  border: 1px solid black;
+  opacity: ${({ disabled }) => (disabled ? '0.5' : '1')};
+  border-radius: 6px;
+  background: white;
+  color: black;
+  font-size: 20px;
+  cursor: pointer;
+`
+
+export default function Table({
+  columns,
+  data,
+  withPagination,
+}: {
+  columns: Column[]
+  data: any
+  withPagination?: boolean
+}) {
+  const [actualPageSize, setActualPageSize] = useState(10)
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const { getTableProps, getTableBodyProps, headerGroups, page, prepareRow, setPageSize } = useTable(
     {
       columns,
       data,
@@ -48,46 +77,68 @@ export default function Table({ columns, data }: { columns: Column[]; data: any 
         },
       },
     },
-    useSortBy
+    useSortBy,
+    usePagination
   )
 
   return (
-    <TableWrapper>
-      <table {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup, idx) => (
-            <tr {...headerGroup.getHeaderGroupProps()} key={`headtr-${idx}`}>
-              {headerGroup.headers.map((column, index) => {
-                const { getHeaderProps, render } = column
-                // Cast here because keys are missing these keys in interface
-                const { getSortByToggleProps, isSorted, isSortedDesc } = column as any
-                return (
-                  <th {...getHeaderProps(getSortByToggleProps())} key={`headtr-th-${idx}-${index}`}>
-                    {render('Header')}
-                    <span>{isSorted ? (isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
-                  </th>
-                )
-              })}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row, idx) => {
-            prepareRow(row)
-            return (
-              <tr {...row.getRowProps()} key={`tr-${idx}`}>
-                {row.cells.map((cell, index) => {
+    <>
+      <TableWrapper>
+        <table {...getTableProps()}>
+          <thead>
+            {headerGroups.map((headerGroup, idx) => (
+              <tr {...headerGroup.getHeaderGroupProps()} key={`headtr-${idx}`}>
+                {headerGroup.headers.map((column, index) => {
+                  const { getHeaderProps, render } = column
+                  // Cast here because keys are missing these keys in interface
+                  const { getSortByToggleProps, isSorted, isSortedDesc } = column as any
                   return (
-                    <td {...cell.getCellProps()} key={`tr-td-${idx}-${index}`}>
-                      {cell.render('Cell')}
-                    </td>
+                    <th {...getHeaderProps(getSortByToggleProps())} key={`headtr-th-${idx}-${index}`}>
+                      {render('Header')}
+                      <span>{isSorted ? (isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
+                    </th>
                   )
                 })}
               </tr>
-            )
-          })}
-        </tbody>
-      </table>
-    </TableWrapper>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {page.map((row, idx) => {
+              prepareRow(row)
+              return (
+                <tr {...row.getRowProps()} key={`tr-${idx}`}>
+                  {row.cells.map((cell, index) => {
+                    return (
+                      <td {...cell.getCellProps()} key={`tr-td-${idx}-${index}`}>
+                        {cell.render('Cell')}
+                      </td>
+                    )
+                  })}
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </TableWrapper>
+      {withPagination && page?.length && (
+        <PaginationButtonWrapper>
+          <StyledButton
+            onClick={() => {
+              setActualPageSize((prevPageSize) => {
+                const newPageSize = prevPageSize + 10
+                setPageSize(newPageSize)
+                if (newPageSize >= data.length) {
+                  return data.length
+                }
+                return newPageSize
+              })
+            }}
+            disabled={actualPageSize >= data?.length}
+          >
+            Show more
+          </StyledButton>
+        </PaginationButtonWrapper>
+      )}
+    </>
   )
 }
