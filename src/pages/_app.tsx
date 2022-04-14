@@ -5,6 +5,8 @@ import { StarknetProvider } from '@starknet-react/core'
 import Header from '~/components/Header'
 import { BigNumber } from 'bignumber.js'
 import { S2MTransactionManagerProvider } from '~/providers/transaction'
+import Footer from '~/components/Footer'
+import React from 'react'
 
 function MyApp({ Component, pageProps }: AppProps) {
   BigNumber.config({ EXPONENTIAL_AT: 76 })
@@ -19,6 +21,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <ThemedGlobalStyle />
         <Header />
         <Component {...pageProps} />
+        <Footer />
       </S2MTransactionManagerProvider>
     </StarknetProvider>
   )
